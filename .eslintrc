@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "globals": {
+    "BigInt": false,
+    "Map": false
+  },
+  "rules": {
+    "complexity": ['error', 4],
+    "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+    "filenames/match-regex": [2, "^[a-z-_]+$", true]
+  },
+  "extends": ["eslint-config-stickler"]
+}

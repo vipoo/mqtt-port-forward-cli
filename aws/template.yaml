@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Create role for iot access'
+
+Resources:
+  DeviceAccessRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - 'credentials.iot.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+
+Outputs:
+  DeviceAccessRole:
+    Description: "assume role for device"
+    Value: { "Fn::GetAtt": ["DeviceAccessRole", "Arn"] }
