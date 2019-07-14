@@ -1,24 +1,25 @@
 {
-  "name": "mqtt-port-forward-example",
+  "name": "mqtt-port-forward-cli",
   "version": "0.0.1",
-  "description": "Create a socket between an 2 mqtt subscribers",
-  "main": "index.js",
+  "description": "cli tools for mqtt-port-forward module",
   "scripts": {
-    "start": "babel-node ./src/index.js",
-    "lint": "eslint --fix src tests",
-    "test": "NODE_ENV=test mocha --require \"@babel/register\" tests/**",
-    "tst": "NODE_ENV=test mocha --require \"@babel/register\" tests/**",
-    "posttest": "eslint --fix src tests",
-    "configure:iot:access": "babel-node ./scripts/configure-iot-access.js"
+    "build": "npm --silent audit && cp ./src/bin/node-no-depreciation ./bin/ && webpack --config \"./src/bin/webpack.config.js\" -r \"@babel/register\"",
+    "test": "npm --silent audit && eslint src",
+    "prepack": "npm --silent run build",
+    "lint": "eslint --fix src"
   },
   "author": "Dean Netherton",
   "license": "ISC",
+  "bin": {
+    "mqtt-port-forward": "./bin/mqtt-port-forward",
+    "node-no-depreciation": "./bin/node-no-depreciation",
+    "aws-configure-access": "./bin/aws-configure-access"
+  },
   "dependencies": {
-    "aws-iot-device-sdk": "^2.2.1",
     "aws-sdk": "^2.491.0",
-    "core-js": "^3.0.0",
-    "debug": "^4.1.1",
-    "mqtt": "^3.0.0",
+    "mqtt-port-forward": "0.0.1"
+  },
+  "devDependencies": {
     "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/node": "^7.2.2",
@@ -31,10 +32,14 @@
     "@babel/plugin-proposal-throw-expressions": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
     "@babel/register": "^7.4.4",
+    "aws-iot-device-sdk": "^2.2.1",
     "babel-eslint": "^11.0.0-beta.0",
+    "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.3.0",
+    "core-js": "^3.0.0",
+    "debug": "^4.1.1",
     "eslint": "^6.0.1",
     "eslint-config-google": "^0.13.0",
     "eslint-config-stickler": "^1.0.4",
@@ -43,9 +48,14 @@
     "eslint-plugin-no-only-tests": "^2.3.0",
     "eslint-plugin-node": "^9.1.0",
     "mocha": "^6.1.4",
+    "mqtt": "^3.0.0",
+    "ms": "^2.1.2",
     "npm-watch": "^0.6.0",
     "rmfr": "^2.0.0",
     "sinon": "^7.3.2",
-    "sinon-chai": "^3.3.0"
+    "sinon-chai": "^3.3.0",
+    "terser-webpack-plugin": "^1.3.0",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
   }
 }

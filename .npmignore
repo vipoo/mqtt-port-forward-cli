@@ -1,7 +1,5 @@
 src
-scripts
-tests
 .*
 *.tgz
-/examples
-/tmp
+tmp
+todo.md

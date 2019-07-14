@@ -4,7 +4,9 @@ export const region = process.env.AWS_REGION || 'ap-southeast-2'
 export const sessionToken = process.env.AWS_SESSION_TOKEN
 
 AWS.config.apiVersions = {
-  iot: '2015-05-28'
+  iot: '2015-05-28',
+  iam: '2010-05-08',
+  sts: '2011-06-15'
 }
 
 AWS.config.update({region})
@@ -18,6 +20,8 @@ function promiseAlways(name) {
 }
 
 export const Iot = promiseAlways('Iot')
+export const IAM = promiseAlways('IAM')
+export const STS = promiseAlways('STS')
 const iot = new Iot()
 
 export let getAwsIotEndPoint = async () => {
@@ -27,4 +31,4 @@ export let getAwsIotEndPoint = async () => {
   return endpoint
 }
 
-export default {AWS, getAwsIotEndPoint, Iot}
+export default {AWS, getAwsIotEndPoint, Iot, IAM, STS, region}
