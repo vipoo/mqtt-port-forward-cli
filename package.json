@@ -1,6 +1,6 @@
 {
   "name": "mqtt-port-forward-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "cli tools for mqtt-port-forward module",
   "scripts": {
     "build": "npm --silent audit && cp ./src/bin/node-no-depreciation ./bin/ && webpack --config \"./src/bin/webpack.config.js\" -r \"@babel/register\"",
