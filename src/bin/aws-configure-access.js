@@ -5,6 +5,7 @@ import caFile from '../lib/amazon-root-ca1-pem'
 import {promises as fsp} from 'fs'
 import {configureRoleIdentities, deleteRoleIdentities, configureIotAccess, deleteIotAccess} from '../lib/aws-iot-access'
 import {log} from '../lib/log'
+import {getAwsIotEndPoint} from './../lib/aws'
 
 program
   .version(process.env.npm_package_version)
@@ -32,6 +33,7 @@ async function deleteResources(topicName) {
 async function createResources(topicName) {
   const homeConfigPath = await getDefaultDir()
   const configOptions = await getMqttOptions()
+  const endpoint = await getAwsIotEndPoint()
 
   const outputDir = program.dir ? path.join(process.cwd(), program.dir) : homeConfigPath
   configOptions.keyPath = path.join(outputDir, 'private.key')
@@ -41,6 +43,7 @@ async function createResources(topicName) {
   await fsp.mkdir(outputDir, {recursive: true})
   await fsp.writeFile(configOptions.caPath, caFile, {flag: 'wx'}).catch(() => {})
 
+  configOptions.host = endpoint
   await saveConfig(configOptions)
 
   await configureRoleIdentities(topicName)
