@@ -4,6 +4,7 @@ import {getMqttOptions} from '../lib/config'
 import awsIot from 'aws-iot-device-sdk'
 import {forwardMqttToLocalPort, forwardLocalPortToMqtt} from 'mqtt-port-forward'
 import debug from 'debug'
+import {log} from '../lib/log'
 
 debug.enable('mqtt:pf:info')
 
@@ -31,13 +32,14 @@ async function mqttPortForwardOut(topic) {
 
   const options = {
     host: endpoint,
-    debug: false,
-    keepalive: 60,
+    debug: true,
     qos: 1,
-    ...configOptions
+    ...configOptions,
+    keepalive: 60
   }
 
   const client = awsIot.device({...options, clientId: `${topic}-out`})
+  client.on('error', err => log.info('MQTTClient Error', err))
   //const client = await createMqttClient({...options, clientId: '${topic}-out'})
 
   forwardMqttToLocalPort(client, 22, topic)
@@ -49,13 +51,14 @@ async function mqttPortForwardIn(topic) {
 
   const options = {
     host: endpoint,
-    debug: false,
-    keepalive: 60,
+    debug: true,
     qos: 1,
-    ...configOptions
+    ...configOptions,
+    keepalive: 60
   }
 
   const client = awsIot.device({...options, clientId: `${topic}-in`})
+  client.on('error', err => log.info('MQTTClient Error', err))
   //const client = await createMqttClient({...options, clientId: '${topic}-in'})
   forwardLocalPortToMqtt(client, 2222, topic)
 }
