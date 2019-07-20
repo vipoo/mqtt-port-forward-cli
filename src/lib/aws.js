@@ -1,7 +1,7 @@
-import _AWS from 'aws-sdk'
+import AWS from 'aws-sdk/global'
+import Iot from 'aws-sdk/clients/iot'
 import awsAsPromise from 'aws-sdk-as-promise'
 
-export const AWS = _AWS
 export const region = process.env.AWS_REGION || 'ap-southeast-2'
 
 AWS.config.apiVersions = {
@@ -12,11 +12,11 @@ AWS.config.apiVersions = {
 AWS.config.update({region})
 
 export let getAwsIotEndPoint = async () => {
-  const iot = awsAsPromise(new AWS.Iot())
+  const iot = awsAsPromise(new Iot())
   const result = await iot.describeEndpoint({endpointType: 'iot:Data-ATS'})
   const endpoint = result.endpointAddress
   getAwsIotEndPoint = () => endpoint
   return endpoint
 }
 
-export default {AWS, getAwsIotEndPoint, region}
+export default {getAwsIotEndPoint, region}
