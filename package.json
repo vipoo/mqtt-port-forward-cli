@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.491.0",
-    "mqtt-port-forward": "0.0.2"
+    "mqtt-port-forward": "^0.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
