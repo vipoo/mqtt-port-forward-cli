@@ -1,16 +1,14 @@
 import program from 'commander'
 import {getMqttOptions} from '../lib/config'
-import awsIot from 'aws-iot-device-sdk'
-//import {createMqttClient} from '../lib/mqtt'
+//import awsIot from 'aws-iot-device-sdk'
+import {getAwsIotEndPoint} from './../lib/aws'
+import {createTlsMqttClient} from 'mqtt-extras/tls'
+import {mqttClientWithDebug} from 'mqtt-extras/with-debug'
 import {forwardMqttToLocalPort, forwardLocalPortToMqtt} from 'mqtt-port-forward'
 import debug from 'debug'
 import {log} from '../lib/log'
 
-if (process.env.DEBUG)
-  for (const d of process.env.DEBUG.split(','))
-    debug.enable(d)
-
-debug.enable('mqtt:pf:info')
+debug.enable(`mqtt:pf:info,${process.env.DEBUG}`)
 
 program
   .version(process.env.npm_package_version)
@@ -32,16 +30,18 @@ program
 
 async function mqttPortForwardOut(topic) {
   const configOptions = await getMqttOptions()
+  const host = await getAwsIotEndPoint()
 
   const options = {
+    host,
     debug: true,
     qos: 1,
     ...configOptions,
     keepalive: 60
   }
 
-  //const client = await createMqttClient({...options, clientId: `${topic}-out`})
-  const client = awsIot.device({...options, clientId: `${topic}-out`})
+  const client = mqttClientWithDebug(createTlsMqttClient({...options, clientId: `${topic}-out`}))
+  //const client = awsIot.device({...options, clientId: `${topic}-out`})
   client.on('error', err => log.info('MQTTClient Error', err))
 
   forwardMqttToLocalPort(client, 22, topic)
@@ -49,17 +49,18 @@ async function mqttPortForwardOut(topic) {
 
 async function mqttPortForwardIn(topic) {
   const configOptions = await getMqttOptions()
-  //const endpoint = await getAwsIotEndPoint()
+  const host = await getAwsIotEndPoint()
 
   const options = {
+    host,
     debug: true,
     qos: 1,
     ...configOptions,
     keepalive: 60
   }
 
-  //const client = await createMqttClient({...options, clientId: `${topic}-in`})
-  const client = awsIot.device({...options, clientId: `${topic}-in`})
+  const client = mqttClientWithDebug(createTlsMqttClient({...options, clientId: `${topic}-in`}))
+  //const client = awsIot.device({...options, clientId: `${topic}-in`})
   client.on('error', err => log.info('MQTTClient Error', err))
   forwardLocalPortToMqtt(client, 2222, topic)
 }

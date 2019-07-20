@@ -17,7 +17,10 @@
   },
   "dependencies": {
     "aws-sdk": "^2.491.0",
-    "mqtt-port-forward": "^0.0.4"
+    "aws-sdk-as-promise": "0.0.1",
+    "debug": "^4.1.1",
+    "mqtt-extras": "0.0.2",
+    "mqtt-port-forward": "^0.0.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -39,7 +42,6 @@
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.3.0",
     "core-js": "^3.0.0",
-    "debug": "^4.1.1",
     "eslint": "^6.0.1",
     "eslint-config-google": "^0.13.0",
     "eslint-config-stickler": "^1.0.4",

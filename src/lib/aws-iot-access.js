@@ -1,9 +1,11 @@
-import AWS, {region} from './aws'
+import {AWS, region} from './aws'
+import awsAsPromise from 'aws-sdk-as-promise'
+
 import {log} from './log'
 import assumeRolePolicyDocument from './assume-role-policy-document'
-const Iot = new AWS.Iot()
-const Iam = new AWS.IAM()
-const sts = new AWS.STS()
+const Iot = awsAsPromise(new AWS.Iot())
+const Iam = awsAsPromise(new AWS.IAM())
+const sts = awsAsPromise(new AWS.STS())
 
 const reg = /cert\/(.*)/
 const fromArnToId = certificateArn => reg.exec(certificateArn)[1]
